@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Dinner with Minh Hoang</title>
+  <style>
+    :root{
+      --accent:#334835;
+      --paper:#f6f5f2;
+      --radius:22px;
+      --shadow:0 8px 30px rgba(0,0,0,.12);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      background:var(--paper);
+      display:grid;
+      place-items:center;
+      padding:20px;
+    }
+    .card{
+      width:min(520px,100%);
+      aspect-ratio:710 / 1000;
+      background:#fff url("images/dinner-invite.png") center/cover no-repeat;
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .btn-confirm{
+      position:absolute;
+      left:50%;
+      bottom:22%;
+      transform:translateX(-50%);
+      padding:14px 22px;
+      border-radius:999px;
+      border:none;
+      background:var(--accent);
+      color:#fff;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      font-weight:700;
+      font-size:clamp(13px,3vw,16px);
+      cursor:pointer;
+      box-shadow:0 6px 15px rgba(51,72,53,.3);
+      transition:transform .08s ease,opacity .2s ease;
+    }
+    .btn-confirm:active{
+      transform:translateX(-50%) scale(.97);
+    }
+    .btn-confirm:disabled{
+      opacity:.6;
+      cursor:default;
+    }
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:18px;
+      transform:translateX(-50%);
+      background:#111827;
+      color:#fff;
+      padding:10px 14px;
+      border-radius:12px;
+      font-size:14px;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .2s ease;
+    }
+    .toast.show{opacity:1;}
+  </style>
+</head>
+<body>
+  <main class="card" aria-label="Thiệp mời bữa tối với Minh Hoang">
+    <button id="confirmBtn" class="btn-confirm">
+      Confirm
+    </button>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const WEBHOOK_URL = "/api/confirm"; // endpoint backend của bạn
+    const HOST_EMAIL  = "you@example.com"; // email của bạn (dùng ở backend, ở đây chỉ để gửi kèm)
+
+    const btn   = document.getElementById("confirmBtn");
+    const toast = document.getElementById("toast");
+
+    function showToast(msg){
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(()=>toast.classList.remove("show"), 2200);
+    }
+
+    async function handleConfirm(){
+      btn.disabled = true;
+      showToast("Đang gửi xác nhận...");
+
+      const payload = {
+        event: "dinner-confirm",
+        inviteeName: "Guest",     // có thể thêm input name/email nếu muốn
+        dinnerWith: "Minh Hoang",
+        hostEmail: HOST_EMAIL,
+        confirmedAt: new Date().toISOString(),
+        userAgent: navigator.userAgent
+      };
+
+      try{
+        const res = await fetch(WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        if(res.ok){
+          // thành công → chuyển sang trang cảm ơn
+          window.location.href = "thanks.html";
+        }else{
+          showToast("Có lỗi xảy ra, thử lại sau nhé.");
+          btn.disabled = false;
+        }
+      }catch(e){
+        console.error(e);
+        showToast("Không gửi được, vui lòng thử lại.");
+        btn.disabled = false;
+      }
+    }
+
+    btn.addEventListener("click", handleConfirm);
+  </script>
+</body>
+</html>
