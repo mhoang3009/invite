@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Dinner with Minh Hoang</title>
+
+  <style>
+    :root{
+      --accent:#334835;
+      --paper:#f6f5f2;
+      --radius:22px;
+      --shadow:0 8px 30px rgba(0,0,0,.12);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      background:var(--paper);
+      display:grid;
+      place-items:center;
+      padding:20px;
+    }
+
+    form.card{
+      width:min(520px,100%);
+      aspect-ratio:710 / 1000;
+      background:#fff url("./dinner-invite.png") center/cover no-repeat;
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .btn-confirm{
+      position:absolute;
+      left:50%;
+      bottom:18.5%;
+      transform:translateX(-50%);
+      padding:14px 22px;
+      border-radius:999px;
+      border:none;
+      background:var(--accent);
+      color:#fff;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      font-weight:700;
+      font-size:clamp(13px,3vw,16px);
+      cursor:pointer;
+      box-shadow:0 6px 15px rgba(51,72,53,.3);
+      transition:transform .08s ease,opacity .2s ease;
+    }
+
+    .btn-confirm:active{
+      transform:translateX(-50%) scale(.97);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Formspree form -->
+  <form 
+      class="card"
+      action="https://formspree.io/f/myzldryw"
+      method="POST"
+      aria-label="Dinner invite with Minh Hoang"
+  >
+
+    <!-- data gửi về email -->
+    <input type="hidden" name="event" value="dinner-confirm">
+    <input type="hidden" name="dinner-with" value="Minh Hoang">
+
+    <!-- nút Confirm -->
+    <button type="submit" class="btn-confirm">
+      Confirm
+    </button>
+  </form>
+
+  <script>
+    // xử lý redirect sau submit
+    const form = document.querySelector("form");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const data = new FormData(form);
+
+      const res = await fetch(form.action, {
+        method: "POST",
+        body: data,
+        headers: { "Accept": "application/json" }
+      });
+
+      if (res.ok) {
+        window.location.href = "thanks.html";
+      } else {
+        alert("Có lỗi khi gửi xác nhận. Thử lại nhé!");
+      }
+    });
+  </script>
+
+</body>
+</html>
