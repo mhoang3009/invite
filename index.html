@@ -14,13 +14,14 @@
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%}
     body{
-      font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
       background:var(--paper);
       display:grid;
       place-items:center;
       padding:20px;
     }
-    .card{
+    /* FORM = card, để Netlify đọc được luôn */
+    form.card{
       width:min(520px,100%);
       aspect-ratio:710 / 1000;
       background:#fff url("images/dinner-invite.png") center/cover no-repeat;
@@ -50,84 +51,35 @@
     .btn-confirm:active{
       transform:translateX(-50%) scale(.97);
     }
-    .btn-confirm:disabled{
-      opacity:.6;
-      cursor:default;
-    }
-    .toast{
-      position:fixed;
-      left:50%;
-      bottom:18px;
-      transform:translateX(-50%);
-      background:#111827;
-      color:#fff;
-      padding:10px 14px;
-      border-radius:12px;
-      font-size:14px;
-      opacity:0;
-      pointer-events:none;
-      transition:opacity .2s ease;
-    }
-    .toast.show{opacity:1;}
   </style>
 </head>
 <body>
-  <main class="card" aria-label="Thiệp mời bữa tối với Minh Hoang">
-    <button id="confirmBtn" class="btn-confirm">
+  <!-- Netlify Form -->
+  <form class="card"
+        name="dinner-confirm"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        action="/thanks.html"
+        aria-label="Dinner invite with Minh Hoang">
+
+    <!-- bắt buộc cho Netlify -->
+    <input type="hidden" name="form-name" value="dinner-confirm" />
+    <!-- honeypot chống bot -->
+    <p style="display:none">
+      <label>Don’t fill this out if you're human:
+        <input name="bot-field" />
+      </label>
+    </p>
+
+    <!-- các field ẩn thêm thông tin (tuỳ bạn) -->
+    <input type="hidden" name="event" value="dinner-confirm" />
+    <input type="hidden" name="dinner-with" value="Minh Hoang" />
+
+    <!-- nút Confirm nằm đúng vị trí trên thiệp -->
+    <button type="submit" class="btn-confirm">
       Confirm
     </button>
-  </main>
-
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
-  <script>
-    const WEBHOOK_URL = "/api/confirm"; // endpoint backend của bạn
-    const HOST_EMAIL  = "you@example.com"; // email của bạn (dùng ở backend, ở đây chỉ để gửi kèm)
-
-    const btn   = document.getElementById("confirmBtn");
-    const toast = document.getElementById("toast");
-
-    function showToast(msg){
-      toast.textContent = msg;
-      toast.classList.add("show");
-      setTimeout(()=>toast.classList.remove("show"), 2200);
-    }
-
-    async function handleConfirm(){
-      btn.disabled = true;
-      showToast("Đang gửi xác nhận...");
-
-      const payload = {
-        event: "dinner-confirm",
-        inviteeName: "Guest",     // có thể thêm input name/email nếu muốn
-        dinnerWith: "Minh Hoang",
-        hostEmail: HOST_EMAIL,
-        confirmedAt: new Date().toISOString(),
-        userAgent: navigator.userAgent
-      };
-
-      try{
-        const res = await fetch(WEBHOOK_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-
-        if(res.ok){
-          // thành công → chuyển sang trang cảm ơn
-          window.location.href = "thanks.html";
-        }else{
-          showToast("Có lỗi xảy ra, thử lại sau nhé.");
-          btn.disabled = false;
-        }
-      }catch(e){
-        console.error(e);
-        showToast("Không gửi được, vui lòng thử lại.");
-        btn.disabled = false;
-      }
-    }
-
-    btn.addEventListener("click", handleConfirm);
-  </script>
+  </form>
 </body>
 </html>
