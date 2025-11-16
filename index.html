@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Dinner with Minh Hoang</title>
+
   <style>
     :root{
       --accent:#334835;
@@ -11,8 +12,10 @@
       --radius:22px;
       --shadow:0 8px 30px rgba(0,0,0,.12);
     }
+
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%}
+
     body{
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
       background:var(--paper);
@@ -20,25 +23,17 @@
       place-items:center;
       padding:20px;
     }
-<<<<<<< HEAD
-    /* FORM = card, để Netlify đọc được luôn */
+
     form.card{
       width:min(520px,100%);
       aspect-ratio:710 / 1000;
-      background:#fff url("images/dinner-invite.png") center/cover no-repeat;
+      background:#fff url("./dinner-invite.png") center/cover no-repeat;
       border-radius:var(--radius);
       box-shadow:var(--shadow);
       position:relative;
       overflow:hidden;
-=======
-    .card{
-  width:min(520px,100%);
-  aspect-ratio:710 / 1000;
-  background:#fff url("./dinner-invite.png") center/cover no-repeat;
-  /* ... */
-}
->>>>>>> 7b668e11b26dc2137a30edb6214c8cc4152c4c24
     }
+
     .btn-confirm{
       position:absolute;
       left:50%;
@@ -57,38 +52,55 @@
       box-shadow:0 6px 15px rgba(51,72,53,.3);
       transition:transform .08s ease,opacity .2s ease;
     }
+
     .btn-confirm:active{
       transform:translateX(-50%) scale(.97);
     }
   </style>
 </head>
+
 <body>
-  <!-- Netlify Form -->
-  <form class="card"
-        name="dinner-confirm"
-        method="POST"
-        data-netlify="true"
-        netlify-honeypot="bot-field"
-        action="/thanks.html"
-        aria-label="Dinner invite with Minh Hoang">
 
-    <!-- bắt buộc cho Netlify -->
-    <input type="hidden" name="form-name" value="dinner-confirm" />
-    <!-- honeypot chống bot -->
-    <p style="display:none">
-      <label>Don’t fill this out if you're human:
-        <input name="bot-field" />
-      </label>
-    </p>
+  <!-- Formspree form -->
+  <form 
+      class="card"
+      action="https://formspree.io/f/myzldryw"
+      method="POST"
+      aria-label="Dinner invite with Minh Hoang"
+  >
 
-    <!-- các field ẩn thêm thông tin (tuỳ bạn) -->
-    <input type="hidden" name="event" value="dinner-confirm" />
-    <input type="hidden" name="dinner-with" value="Minh Hoang" />
+    <!-- data gửi về email -->
+    <input type="hidden" name="event" value="dinner-confirm">
+    <input type="hidden" name="dinner-with" value="Minh Hoang">
 
-    <!-- nút Confirm nằm đúng vị trí trên thiệp -->
+    <!-- nút Confirm -->
     <button type="submit" class="btn-confirm">
       Confirm
     </button>
   </form>
+
+  <script>
+    // xử lý redirect sau submit
+    const form = document.querySelector("form");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const data = new FormData(form);
+
+      const res = await fetch(form.action, {
+        method: "POST",
+        body: data,
+        headers: { "Accept": "application/json" }
+      });
+
+      if (res.ok) {
+        window.location.href = "thanks.html";
+      } else {
+        alert("Có lỗi khi gửi xác nhận. Thử lại nhé!");
+      }
+    });
+  </script>
+
 </body>
 </html>
