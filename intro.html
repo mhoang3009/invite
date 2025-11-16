@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lời mời đặc biệt</title>
+
+  <style>
+    :root{
+      --accent:#334835;
+      --paper:#f6f5f2;
+      --radius:22px;
+      --shadow:0 8px 30px rgba(0,0,0,.12);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+
+    body{
+      background:var(--paper);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      padding:30px;
+    }
+
+    .container{
+      max-width:520px;
+      background:white;
+      padding:40px 24px;
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+
+    h1{
+      font-size:clamp(24px,6vw,32px);
+      color:#333;
+      margin-bottom:10px;
+      font-weight:700;
+    }
+
+    p{
+      font-size:clamp(15px,4vw,18px);
+      color:#555;
+      margin-bottom:28px;
+      line-height:1.5;
+    }
+
+    .next-btn{
+      display:inline-block;
+      padding:14px 30px;
+      background:var(--accent);
+      color:white;
+      text-decoration:none;
+      border-radius:30px;
+      font-size:clamp(14px,4vw,18px);
+      font-weight:600;
+      letter-spacing:0.04em;
+      box-shadow:0 6px 18px rgba(51,72,53,.25);
+      transition:0.15s ease;
+    }
+
+    .next-btn:active{
+      transform:scale(0.96);
+    }
+     .sticker-slot-1 {
+  position: relative;
+  top: 10px;        /* nằm bên trong, không tràn */
+  right: -126px;      /* nằm bên trong, không tràn */
+  width: 100px;
+  height: 100px;
+  background-image: url("./your-sticker.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 1;
+  border: none;
+}
+
+
+   .sticker-slot-1 {
+  background-image: url("./OIP.webp");
+  opacity: 1;
+  border: none;
+}
+  </style>
+</head>
+<body>
+
+  <div class="container">
+        <div class="sticker-slot sticker-slot-1"></div>
+
+    <h1>Dear em thỏ dấu iu,</h1>
+    <p>
+      Anh tới đây có một lời mời dành cho emmm.<br>
+      
+    </p>
+
+    <!-- Button dẫn sang index.html -->
+    <a href="index.html" class="next-btn"> →</a>
+  </div>
+
+</body>
+</html>
